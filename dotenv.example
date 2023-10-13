@@ -1,0 +1,2 @@
+DATABASE_URL=mysql://<username>:<password>@localhost/todos
+NODE_ENV=development || production
