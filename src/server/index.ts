@@ -1,5 +1,4 @@
 import {publicProcedure, router} from "@/server/trpc";
-
 import { db } from '@/lib/db/db'
 import { z } from 'zod'
 
@@ -35,7 +34,6 @@ export const appRouter = router({
         }
       })
     })
-  
 })
 
 

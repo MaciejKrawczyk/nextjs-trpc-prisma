@@ -2,6 +2,10 @@
 import { trpc } from '@/trpc/client'
 import {useState} from "react";
 import {serverClient} from "@/trpc/serverClient";
+import {Button} from "@/components/ui/button";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
 
 export default function TodoList({ initialTodos } : { initialTodos: Awaited<ReturnType<typeof serverClient["getTodos"]>> }) {
   
@@ -28,6 +32,20 @@ export default function TodoList({ initialTodos } : { initialTodos: Awaited<Retu
       <div className={'text-black my-5 text-3xl'}>
         {getTodos?.data?.map((todo) => (
           <div key={todo.id} className={'flex gap-3 items-center'}>
+            
+            <Checkbox
+              id={`check-${todo.id}`}
+              checked={!!todo.done}
+              style={{zoom: 1.5}}
+              onChange={ () => {
+                setDone.mutate({
+                  id: todo.id,
+                  done: !todo.done
+                })
+              }}
+            />
+            <Label htmlFor={`check-${todo.id}`}> {todo.content} </Label>
+            
             <input
               id={`check-${todo.id}`}
               type="checkbox"
@@ -45,21 +63,25 @@ export default function TodoList({ initialTodos } : { initialTodos: Awaited<Retu
             >
               {todo.content}
             </label>
+            
           </div>
         ))}
-        <input
+        <Input
           id={"content"}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           type="text"
           className={"text-black"}
         />
-        <label htmlFor="content">Content</label>
-        <button onClick={async () => {
-          if (content.length) {
-            addTodo.mutate(content)
-            setContent("");
-        }}}>Add Todoo</button>
+        
+        <Button
+          onClick={async () => {
+            if (content.length) {
+              addTodo.mutate(content)
+              setContent("");
+            }}}
+        >Add Todoo</Button>
+        
       </div>
     </div>
   )
